@@ -190,17 +190,38 @@
     // Replace with your GPT embed or actual API calls.
     const chatForm = document.getElementById('chat-form');
     const chatResponse = document.getElementById('chat-response');
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const userInput = document.getElementById('user-input').value.trim();
-      if (!userInput) return;
-      // Example “fake” response:
-      chatResponse.innerHTML =
-        '<p><strong>You asked:</strong> ' +
-        userInput +
-        '</p><p><em>Response:</em> Imagine a warm greeting, thoughtful surprise amenity, and personalized follow-up—just like a five-star hotel.</p>';
-      document.getElementById('user-input').value = '';
-    });
+    if (chatForm && chatResponse) {
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userInput = document.getElementById('user-input').value.trim();
+        if (!userInput) return;
+
+        // Clear previous response
+        chatResponse.innerHTML = '';
+
+        // Build safe markup without injecting user HTML
+        const questionPara = document.createElement('p');
+        const strong = document.createElement('strong');
+        strong.textContent = 'You asked:';
+        questionPara.appendChild(strong);
+        questionPara.appendChild(document.createTextNode(' ' + userInput));
+
+        const responsePara = document.createElement('p');
+        const em = document.createElement('em');
+        em.textContent = 'Response:';
+        responsePara.appendChild(em);
+        responsePara.appendChild(
+          document.createTextNode(
+            ' Imagine a warm greeting, thoughtful surprise amenity, and personalized follow-up—just like a five-star hotel.'
+          )
+        );
+
+        chatResponse.appendChild(questionPara);
+        chatResponse.appendChild(responsePara);
+
+        document.getElementById('user-input').value = '';
+      });
+    }
   </script>
 </body>
 </html>
